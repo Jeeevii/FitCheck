@@ -13,3 +13,7 @@
 
 ## Install Required Dependencies
 ``` pip install -r requirements.txt ```
+
+## Create .env file to GEMINI API KEY
+- .env File should look like: 
+``` GEMINI_API_KEY=<API_KEY>```
