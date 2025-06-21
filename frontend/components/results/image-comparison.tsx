@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Sparkles, ArrowRight } from "lucide-react"
+import { Sparkles, Wand2, Loader2, Zap, Stars } from "lucide-react"
 import Image from "next/image"
 import { generateEdit } from "@/lib/api"
 
@@ -15,120 +15,118 @@ interface ImageComparisonProps {
 }
 
 export default function ImageComparison({ originalImage, imagePath, editPrompt, isVisible }: ImageComparisonProps) {
+  const [editedImageUrl, setEditedImageUrl] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
-  const [enhancedImageUrl, setEnhancedImageUrl] = useState<string | null>(null)
+  const [originalImageUrl, setOriginalImageUrl] = useState<string>("")
+  console.log("imagePath and editPrompt", { imagePath, editPrompt })
+  
+  // Create URL for the original image
+  useState(() => {
+    if (originalImage) {
+      const url = URL.createObjectURL(originalImage)
+      setOriginalImageUrl(url)
+      return () => URL.revokeObjectURL(url)
+    }
+  })
 
-  const handleGenerateEnhanced = async () => {
+  const handleGenerateEdit = async () => {
     setIsGenerating(true)
     try {
       const response = await generateEdit(imagePath, editPrompt)
-      setEnhancedImageUrl(response.edited_image_url)
+      setEditedImageUrl(response.edited_image_url)
     } catch (error) {
-      console.error("Image generation failed:", error)
-      alert("Image generation failed. Please try again!")
+      console.error("Failed to generate edited image:", error)
     } finally {
       setIsGenerating(false)
     }
   }
 
-  // Create preview URL for original image
-  const originalImageUrl = URL.createObjectURL(originalImage)
-
   return (
-    <div
-      className={`transition-all duration-1000 delay-700 ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-      }`}
-    >
-      <Card className="border-0 shadow-xl bg-white rounded-3xl overflow-hidden">
-        <CardContent className="p-8">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-2xl font-bold text-gray-800">Style Enhancement</h3>
-            {!enhancedImageUrl && (
-              <Button
-                onClick={handleGenerateEnhanced}
-                disabled={isGenerating}
-                className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold px-6 py-3 rounded-full shadow-lg"
-              >
-                {isGenerating ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-5 h-5 mr-2" />
-                    Enhance My Fit!
-                  </>
-                )}
-              </Button>
-            )}
-          </div>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+    {/* Original Image */}
+    <div className={`text-center transition-all duration-700 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}`}>
+      <h4 className="font-bold text-gray-800 mb-4 text-xl">Original</h4>
+      <Card className="shadow-lg bg-white rounded-xl overflow-hidden">
+        <CardContent className="p-3">
+          <Image
+            src={originalImageUrl || "/placeholder.svg"}
+            alt="Original outfit"
+            width={280}
+            height={360}
+            className="rounded-xl object-cover w-full h-[20rem]"
+          />
+        </CardContent>
+      </Card>
+    </div>
 
-          <div className="mb-6 p-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl border border-orange-100">
-            <p className="text-sm font-medium text-gray-700 mb-2">Enhancement Plan:</p>
-            <p className="text-gray-600 italic">"{editPrompt}"</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            {/* Original Image */}
-            <div className="text-center">
-              <h4 className="text-lg font-bold text-gray-700 mb-4">Your Original Fit</h4>
-              <div className="relative">
-                <Image
-                  src={originalImageUrl || "/placeholder.svg"}
-                  alt="Original outfit"
-                  width={300}
-                  height={400}
-                  className="rounded-2xl object-cover w-full h-96 shadow-lg"
-                />
+    {/* AI Enhanced Image */}
+    <div className={`text-center transition-all duration-700 delay-200 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}`}>
+      <h4 className="font-bold text-gray-800 mb-4 text-xl flex items-center justify-center">
+        <Sparkles className="w-5 h-5 mr-2 text-orange-500" />
+        AI Enhanced
+      </h4>
+      <Card className="shadow-lg bg-white rounded-xl overflow-hidden">
+        <CardContent className="p-3">
+          {editedImageUrl ? (
+            <div className="relative">
+              <Image
+                src={editedImageUrl}
+                alt="AI enhanced outfit"
+                width={280}
+                height={360}
+                className="rounded-xl object-cover w-full h-[20rem]"
+              />
+              <div className="absolute top-3 right-3 bg-gradient-to-r from-orange-500 to-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                Enhanced ✨
               </div>
             </div>
-
-            {/* Arrow or Enhanced Image */}
-            <div className="text-center">
-              {enhancedImageUrl ? (
-                <>
-                  <h4 className="text-lg font-bold text-gray-700 mb-4">AI Enhanced Version</h4>
-                  <div className="relative">
-                    <Image
-                      src={enhancedImageUrl || "/placeholder.svg"}
-                      alt="Enhanced outfit"
-                      width={300}
-                      height={400}
-                      className="rounded-2xl object-cover w-full h-96 shadow-lg"
-                    />
-                    <div className="absolute -top-2 -right-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
-                      Enhanced! ✨
+          ) : (
+            <div className="h-[20rem] bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 rounded-xl flex flex-col items-center justify-center border-2 border-dashed border-orange-200 relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-200/30 via-red-200/30 to-pink-200/30 animate-pulse" />
+              {isGenerating ? (
+                <div className="relative z-10 text-sm text-center">
+                  <Loader2 className="w-10 h-10 text-orange-500 animate-spin mb-2" />
+                  <p className="font-semibold text-gray-700">🎨 Creating your enhanced look...</p>
+                  <p className="text-gray-600 text-xs">AI is working its magic ✨</p>
+                </div>
+              ) : (
+                <div className="relative z-10 text-sm text-center">
+                  <div className="relative mb-3">
+                    <div className="w-14 h-14 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-full flex items-center justify-center shadow-2xl">
+                      <Wand2 className="w-7 h-7 text-white" />
+                    </div>
+                    <div className="absolute -top-1 -right-1">
+                      <Stars className="w-5 h-5 text-yellow-400 animate-bounce" />
                     </div>
                   </div>
-                </>
-              ) : (
-                <div className="flex items-center justify-center h-96">
-                  <div className="text-center">
-                    <ArrowRight className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500 font-medium">Click "Enhance My Fit!" to see the improved version</p>
+                  <p className="font-semibold text-gray-800 mb-2">Ready for the glow-up? 🔥</p>
+                  <div className="bg-white/80 backdrop-blur-sm rounded-xl p-3 border border-orange-100 max-w-xs mx-auto shadow-sm">
+                    <p className="text-xs text-gray-700 font-semibold mb-1">
+                      <Zap className="w-3 h-3 inline mr-1 text-orange-500" />
+                      Enhancement Plan:
+                    </p>
+                    <p className="text-sm text-orange-700 italic">"{editPrompt}"</p>
                   </div>
+                  <div className="relative mt-4">
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 rounded-full blur-md opacity-40 animate-pulse" />
+                    <Button
+                      onClick={handleGenerateEdit}
+                      size="sm"
+                      className="relative bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 hover:brightness-110 rounded-full px-6 py-2 font-bold text-sm shadow text-white border border-white/20"
+                    >
+                      <Sparkles className="w-4 h-4 mr-2 animate-pulse" />
+                      Generate AI Magic
+                    </Button>
+                  </div>
+                  <p className="text-gray-600 text-xs font-medium mt-2">Transform your look with AI-powered style ✨</p>
                 </div>
               )}
-            </div>
-          </div>
-
-          {enhancedImageUrl && (
-            <div className="mt-6 text-center">
-              <Button
-                onClick={handleGenerateEnhanced}
-                disabled={isGenerating}
-                variant="outline"
-                className="bg-white hover:bg-orange-50 border-orange-200 text-orange-600 hover:text-orange-700"
-              >
-                <Sparkles className="w-4 h-4 mr-2" />
-                Generate Another Version
-              </Button>
             </div>
           )}
         </CardContent>
       </Card>
     </div>
+  </div>
+
   )
 }

@@ -41,7 +41,7 @@ export async function submitFitCheck(image: File, occasion: string): Promise<Fit
 export async function generateEdit(imagePath: string, editPrompt: string): Promise<GenerateEditResponse> {
   console.log("🔄 API: Generating enhanced image...", { imagePath, editPrompt })
 
-  const response = await fetch(`${API_BASE_URL}/api/generate-edit`, {
+  const response = await fetch(`${API_BASE_URL}/generate-image`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -60,6 +60,7 @@ def save_image(image: UploadFile) -> str:
 async def fit_check(image: UploadFile = File(...), occasion: str = Form(...)):
     print(f"Received image: {image.filename}, occasion: {occasion}")
     filepath = save_image(image)
+    print(f"Image saved to: {filepath}")
 
     try:
         with open(filepath, "rb") as f:

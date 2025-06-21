@@ -66,7 +66,7 @@ export default function ResultsDisplay({ originalImage, occasion, analysisData, 
       {/* Image Comparison */}
       <ImageComparison
         originalImage={originalImage}
-        imagePath="user_uploaded_image" // Backend will handle this
+        imagePath={analysisData.image_path}
         editPrompt={analysisData.edit_prompt}
         isVisible={visibleSections.images}
       />
