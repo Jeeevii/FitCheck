@@ -17,7 +17,7 @@
 /backend/env/
 /backend/.env
 /backend/.env.*
-
+/backend/*.pyc
 # Ignore logs and SQLite dbs if any
 /backend/*.log
 /backend/*.sqlite3

@@ -1,11 +1,11 @@
 import type { OccasionOption } from "./types"
 
 export const OCCASION_OPTIONS: OccasionOption[] = [
-  { id: "date", label: "Date Night", emoji: "💕" },
+  { id: "date night", label: "Date Night", emoji: "💕" },
   { id: "work", label: "Work", emoji: "💼" },
   { id: "casual", label: "Casual", emoji: "☕" },
   { id: "party", label: "Party", emoji: "🎉" },
-  { id: "gym", label: "Gym", emoji: "💪" },
+  { id: "gym/workout", label: "Gym", emoji: "💪" },
   { id: "special", label: "Special Event", emoji: "✨" },
 ]
 

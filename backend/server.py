@@ -54,6 +54,7 @@ def save_image(image: UploadFile) -> str:
 # -----------------------------
 @app.post("/fit-check")
 async def fit_check(image: UploadFile = File(...), occasion: str = Form(...)):
+    print(f"Received image: {image.filename}, occasion: {occasion}")
     filepath = save_image(image)
 
     # --- TODO: Call Gemini Vision for analysis ---
@@ -92,7 +93,7 @@ def root():
 # Entry point for running directly
 # -----------------------------
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("server:app", host="localhost", port=8000, reload=True)
 
 # -----------------------------
 # Requirements to Run This App
