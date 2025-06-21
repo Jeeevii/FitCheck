@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import uvicorn
 import uuid
 import os
 
@@ -48,6 +49,11 @@ def save_image(image: UploadFile) -> str:
 # -----------------------------
 # Endpoints
 # -----------------------------
+
+@app.get("/")
+def root():
+    return {"message": "FitCheck.AI backend is running!"}
+
 @app.post("/fit-check")
 async def fit_check(image: UploadFile = File(...), occasion: str = Form(...)):
     filepath = save_image(image)
@@ -77,7 +83,5 @@ async def generate_voice(request: VoiceRequest):
         "audio_url": "https://example.com/voice-feedback.mp3"
     }
 
-@app.get("/")
-def root():
-    return {"message": "FitCheck.AI backend is running!"}
-
+if __name__ == "__main__":
+    uvicorn.run("server:app", host="localhost", port=8000, reload=True)
