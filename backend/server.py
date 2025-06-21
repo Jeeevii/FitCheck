@@ -7,7 +7,6 @@ import os
 
 app = FastAPI()
 
-# Allow frontend to call backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["localhost", "http://localhost:3000"],
