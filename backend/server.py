@@ -4,7 +4,9 @@ from pydantic import BaseModel
 import uuid
 import os
 import uvicorn
+from fastapi.staticfiles import StaticFiles
 from gemini.fitcheck import analyze_outfit
+from kontext import edit_image_with_kontext
 
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -23,6 +25,7 @@ app.add_middleware(
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 # -----------------------------
 # Models
 # -----------------------------
@@ -84,14 +87,18 @@ async def fit_check(image: UploadFile = File(...), occasion: str = Form(...)):
     
 @app.post("/generate-image")
 async def generate_image(request: EditRequest):
-    if not os.path.exists(request.image_path):
-        raise HTTPException(status_code=404, detail="Image not found")
+    print(f"Received edit request: {request.edit_prompt} for image: {request.image_path}")
+    try:
+        if not os.path.exists(request.image_path):
+            raise HTTPException(status_code=404, detail="Image not found")
 
-    # --- TODO: Call Replicate Kontext ---
-    return {
-        "edited_image_url": "https://replicate.delivery/pb/fake-edited-image.jpg"
-    }
+        edited_image_url = edit_image_with_kontext(request.edit_prompt, request.image_path)
+        print(f"Edited image URL: {edited_image_url}")
+        return {"edited_image_url": edited_image_url}
 
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+    
 @app.post("/generate-voice")
 async def generate_voice(request: VoiceRequest):
     # --- TODO: Call Resemble AI or another TTS service ---
