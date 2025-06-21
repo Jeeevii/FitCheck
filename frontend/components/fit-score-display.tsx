@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
+import { Zap } from "lucide-react"
 
 interface FitScoreDisplayProps {
   score: number
@@ -9,13 +10,13 @@ interface FitScoreDisplayProps {
 }
 
 export default function FitScoreDisplay({ score, isVisible }: FitScoreDisplayProps) {
-  const [animatedScore, setAnimatedScore] = useState(0)
+  const [displayScore, setDisplayScore] = useState(0)
 
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(() => {
         const interval = setInterval(() => {
-          setAnimatedScore((prev) => {
+          setDisplayScore((prev) => {
             const increment = score / 50 // Animate over ~50 steps
             const next = prev + increment
             if (next >= score) {
@@ -32,54 +33,56 @@ export default function FitScoreDisplay({ score, isVisible }: FitScoreDisplayPro
   }, [isVisible, score])
 
   const getScoreColor = (score: number) => {
-    if (score >= 8) return "from-green-400 to-emerald-500"
-    if (score >= 6) return "from-yellow-400 to-orange-500"
-    return "from-red-400 to-pink-500"
-  }
-
-  const getScoreEmoji = (score: number) => {
-    if (score >= 8.5) return "🔥"
-    if (score >= 7.5) return "✨"
-    if (score >= 6) return "👍"
-    return "🤔"
+    if (score >= 8) return "from-green-500 to-emerald-500"
+    if (score >= 6) return "from-yellow-500 to-orange-500"
+    return "from-red-500 to-pink-500"
   }
 
   const getScoreText = (score: number) => {
-    if (score >= 8) return "Fire fit!"
-    if (score >= 6) return "Pretty good!"
-    return "Needs work!"
+    if (score >= 9) return "Fire! 🔥"
+    if (score >= 8) return "Looking Good! ✨"
+    if (score >= 7) return "Pretty Solid! 👌"
+    if (score >= 6) return "Not Bad! 👍"
+    if (score >= 5) return "Room to Improve 📈"
+    return "Let's Work on This! 💪"
   }
 
   return (
-    <Card className="border-0 shadow-2xl bg-white rounded-3xl overflow-hidden">
-      <CardContent className="p-8 text-center">
-        <div className="mb-6">
-          <div
-            className={`inline-flex items-center justify-center w-40 h-40 rounded-full bg-gradient-to-r ${getScoreColor(score)} text-white shadow-2xl mb-6 transform transition-all duration-1000 ${
-              isVisible ? "scale-100 rotate-0" : "scale-0 rotate-180"
-            }`}
-          >
-            <div className="text-center">
-              <div className="text-5xl font-bold">{animatedScore.toFixed(1)}</div>
-              <div className="text-sm opacity-90">/ 10</div>
+    <div
+      className={`transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+    >
+      <Card className="border-0 shadow-2xl bg-gradient-to-br from-white to-gray-50 rounded-3xl overflow-hidden">
+        <CardContent className="p-12 text-center">
+          <div className="flex items-center justify-center mb-6">
+            <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center mr-4">
+              <Zap className="w-5 h-5 text-white" />
+            </div>
+            <h3 className="text-3xl font-bold text-gray-800">Your Fit Score</h3>
+          </div>
+
+          <div className="relative mb-8">
+            <div
+              className={`text-8xl font-black bg-gradient-to-r ${getScoreColor(
+                score,
+              )} bg-clip-text text-transparent mb-4`}
+            >
+              {displayScore.toFixed(1)}
+              <span className="text-4xl text-gray-400">/10</span>
+            </div>
+            <p className="text-2xl font-bold text-gray-700">{getScoreText(score)}</p>
+          </div>
+
+          {/* Score visualization */}
+          <div className="w-full max-w-md mx-auto">
+            <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className={`h-full bg-gradient-to-r ${getScoreColor(score)} transition-all duration-2000 ease-out`}
+                style={{ width: `${(displayScore / 10) * 100}%` }}
+              />
             </div>
           </div>
-          <div
-            className={`text-6xl mb-4 transform transition-all duration-700 delay-500 ${
-              isVisible ? "scale-100 opacity-100" : "scale-0 opacity-0"
-            }`}
-          >
-            {getScoreEmoji(score)}
-          </div>
-          <h3
-            className={`text-3xl font-bold text-gray-800 transform transition-all duration-700 delay-700 ${
-              isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-            }`}
-          >
-            {getScoreText(score)}
-          </h3>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

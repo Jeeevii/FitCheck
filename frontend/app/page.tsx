@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Sparkles, Zap, Palette, Target, Shirt, Volume2, Camera } from "lucide-react"
 import Header from "@/components/layout/header"
-import PhotoUpload from "@/components/upload/photo-upload"
-import OccasionSelector from "@/components/upload/occasion-selector"
+import PhotoUpload from "@/components/photo-upload"
+import OccasionSelector from "@/components/occasion-selector"
 import ResultsDisplay from "@/components/results/results-display"
-import { submitFitCheck, dataURLtoFile } from "@/lib/api"
+import { submitFitCheck } from "@/lib/api"
 import type { AppState } from "@/lib/types"
 
 export default function FitCheckAI() {
@@ -26,11 +26,8 @@ export default function FitCheckAI() {
     setState((prev) => ({ ...prev, isAnalyzing: true }))
 
     try {
-      // Convert data URL to File for API
-      const imageFile = dataURLtoFile(state.uploadedImage, "outfit.jpg")
-
-      // Call the API (mock or real based on environment)
-      const response = await submitFitCheck(imageFile, state.selectedOccasion)
+      // Submit the actual file and occasion to backend
+      const response = await submitFitCheck(state.uploadedImage, state.selectedOccasion)
 
       setState((prev) => ({
         ...prev,
@@ -42,6 +39,7 @@ export default function FitCheckAI() {
       console.error("Analysis failed:", error)
       setState((prev) => ({ ...prev, isAnalyzing: false }))
       // TODO: Add error toast/notification
+      alert("Analysis failed. Please try again!")
     }
   }
 

@@ -1,7 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import uvicorn
 import uuid
 import os
 from gemini.fitcheck import analyze_outfit
@@ -27,8 +26,11 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 # Models
 # -----------------------------
 class FitCheckResponse(BaseModel):
-    score: float
-    feedback: str
+    fit_score: float
+    color_theory_score: float
+    occasion_score: float
+    style_flow_score: float
+    ai_feedback: str
     edit_prompt: str
     image_path: str
 
@@ -53,13 +55,9 @@ def save_image(image: UploadFile) -> str:
 # -----------------------------
 # Endpoints
 # -----------------------------
-
-@app.get("/")
-def root():
-    return {"message": "FitCheck.AI backend is running!"}
-
 @app.post("/fit-check")
 async def fit_check(image: UploadFile = File(...), occasion: str = Form(...)):
+    print(f"Received image: {image.filename}, occasion: {occasion}")
     filepath = save_image(image)
 
     try:
@@ -94,5 +92,25 @@ async def generate_voice(request: VoiceRequest):
         "audio_url": "https://example.com/voice-feedback.mp3"
     }
 
+@app.get("/")
+def root():
+    return {"message": "FitCheck.AI backend is running!"}
+
+# -----------------------------
+# Entry point for running directly
+# -----------------------------
 if __name__ == "__main__":
     uvicorn.run("server:app", host="localhost", port=8000, reload=True)
+
+# -----------------------------
+# Requirements to Run This App
+# -----------------------------
+# - Python 3.8+
+# - FastAPI
+# - Uvicorn
+# - Pydantic
+# - Pillow (if image processing is added)
+# - httpx (if using async external API calls)
+# 
+# Recommended installation:
+# pip install fastapi uvicorn pydantic pillow httpx

@@ -7,8 +7,8 @@ import { Upload, X, Camera } from "lucide-react"
 import Image from "next/image"
 
 interface PhotoUploadProps {
-  onImageUpload: (image: string) => void
-  uploadedImage: string | null
+  onImageUpload: (image: File | null) => void
+  uploadedImage: File | null
 }
 
 export default function PhotoUpload({ onImageUpload, uploadedImage }: PhotoUploadProps) {
@@ -16,11 +16,7 @@ export default function PhotoUpload({ onImageUpload, uploadedImage }: PhotoUploa
     (acceptedFiles: File[]) => {
       const file = acceptedFiles[0]
       if (file) {
-        const reader = new FileReader()
-        reader.onload = () => {
-          onImageUpload(reader.result as string)
-        }
-        reader.readAsDataURL(file)
+        onImageUpload(file)
       }
     },
     [onImageUpload],
@@ -32,18 +28,22 @@ export default function PhotoUpload({ onImageUpload, uploadedImage }: PhotoUploa
       "image/*": [".jpeg", ".jpg", ".png", ".webp"],
     },
     multiple: false,
+    maxSize: 10 * 1024 * 1024, // 10MB limit
   })
 
   const removeImage = () => {
-    onImageUpload("")
+    onImageUpload(null)
   }
 
-  if (uploadedImage) {
+  // Create preview URL for uploaded file
+  const previewUrl = uploadedImage ? URL.createObjectURL(uploadedImage) : null
+
+  if (uploadedImage && previewUrl) {
     return (
       <div className="text-center">
         <div className="relative inline-block">
           <Image
-            src={uploadedImage || "/placeholder.svg"}
+            src={previewUrl || "/placeholder.svg"}
             alt="Your fit"
             width={300}
             height={400}
@@ -59,6 +59,9 @@ export default function PhotoUpload({ onImageUpload, uploadedImage }: PhotoUploa
           </Button>
         </div>
         <p className="text-gray-600 mt-4 font-medium">Perfect! Now select your occasion below 👇</p>
+        <p className="text-sm text-gray-500 mt-1">
+          {uploadedImage.name} ({(uploadedImage.size / 1024 / 1024).toFixed(1)}MB)
+        </p>
       </div>
     )
   }
@@ -81,7 +84,7 @@ export default function PhotoUpload({ onImageUpload, uploadedImage }: PhotoUploa
           <p className="text-xl font-bold text-gray-800 mb-2">
             {isDragActive ? "Drop it here! 🔥" : "Upload your style photo"}
           </p>
-          <p className="text-gray-500 mb-6">Drag & drop or click to select • JPG, PNG, WEBP</p>
+          <p className="text-gray-500 mb-6">Drag & drop or click to select • JPG, PNG, WEBP • Max 10MB</p>
           <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold px-8 py-3 rounded-full shadow-lg">
             <Upload className="w-4 h-4 mr-2" />
             Choose File

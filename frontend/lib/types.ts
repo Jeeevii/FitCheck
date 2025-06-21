@@ -6,15 +6,12 @@ export interface FitCheckRequest {
 }
 
 export interface FitCheckResponse {
-  score: number
-  feedback: string
-  edit_prompt: string
-  image_path: string
-  breakdown: {
-    colorTheory: number
-    occasionFit: number
-    styleFlow: number
-  }
+  fit_score: number // Overall fit score (0-10)
+  color_theory_score: number // Color theory score (0-100)
+  occasion_score: number // Occasion appropriateness (0-100)
+  style_flow_score: number // Style flow score (0-100)
+  ai_feedback: string // AI feedback and suggestions
+  edit_prompt: string // Edit prompt for image enhancement
 }
 
 export interface GenerateEditRequest {
@@ -49,7 +46,7 @@ export interface BreakdownItem {
 }
 
 export interface AppState {
-  uploadedImage: string | null
+  uploadedImage: File | null
   selectedOccasion: string
   isAnalyzing: boolean
   showResults: boolean

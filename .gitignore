@@ -1,0 +1,27 @@
+# Root-level .gitignore for a mono repo with frontend and backend folders
+
+# Ignore node_modules and build artifacts in frontend
+/frontend/node_modules/
+/frontend/.next/
+/frontend/out/
+/frontend/build/
+/frontend/.env.local
+/frontend/.env.*.local
+
+# Ignore Python virtual environments and bytecode in backend
+/backend/__pycache__/
+/backend/*.pyc
+/backend/*.pyo
+/backend/*.pyd
+/backend/venv/
+/backend/env/
+/backend/.env
+/backend/.env.*
+/backend/*.pyc
+# Ignore logs and SQLite dbs if any
+/backend/*.log
+/backend/*.sqlite3
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
