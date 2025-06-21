@@ -8,11 +8,6 @@
 /frontend/.env.local
 /frontend/.env.*.local
 
-# Ignore logs and temp files in frontend
-/frontend/npm-debug.log*
-/frontend/yarn-debug.log*
-/frontend/yarn-error.log*
-
 # Ignore Python virtual environments and bytecode in backend
 /backend/__pycache__/
 /backend/*.pyc
@@ -26,12 +21,6 @@
 # Ignore logs and SQLite dbs if any
 /backend/*.log
 /backend/*.sqlite3
-
-# Ignore IDE/editor config files (optional but recommended)
-/.vscode/
-/.idea/
-/*.sublime-project
-/*.sublime-workspace
 
 # Ignore OS generated files
 .DS_Store
