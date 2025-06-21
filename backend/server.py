@@ -65,24 +65,19 @@ async def fit_check(image: UploadFile = File(...), occasion: str = Form(...)):
         with open(filepath, "rb") as f:
             image_bytes = f.read()
 
-        feedback, score, edit_prompt = analyze_outfit(image_bytes, occasion)
+        fit_score, color_theory_score, occasion_score, style_flow_score, ai_feedback, edit_prompt = analyze_outfit(image_bytes, occasion)
         payload = {
-            "score": score,
-            "feedback": feedback,
+            "fit_score": fit_score,
+            "color_theory_score": color_theory_score,
+            "occasion_score": occasion_score,
+            "style_flow_score": style_flow_score,
+            "ai_feedback": ai_feedback,
             "edit_prompt": edit_prompt,
             "image_path": filepath
         }
-        print(f"FitCheck response: {payload}")
+        print(f"(Debugging) FitCheck response: {payload}")
         
-        return FitCheckResponse(
-            fit_score=7.9,
-            color_theory_score=85.0,
-            occasion_score=90.0,
-            style_flow_score=78.5,
-            ai_feedback="Nice layering and color balance. Consider adding a statement accessory to elevate the fit.",
-            edit_prompt=f"add a bold accessory for a {occasion}",
-            image_path=filepath
-        ) 
+        return payload
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Gemini Vision error: {e}")
     
