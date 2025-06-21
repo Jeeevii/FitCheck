@@ -1,12 +1,13 @@
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import uvicorn
 import uuid
 import os
+import uvicorn
 
 app = FastAPI()
 
+# Allow frontend to call backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["localhost", "http://localhost:3000"],
@@ -22,8 +23,11 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 # Models
 # -----------------------------
 class FitCheckResponse(BaseModel):
-    score: float
-    feedback: str
+    fit_score: float
+    color_theory_score: float
+    occasion_score: float
+    style_flow_score: float
+    ai_feedback: str
     edit_prompt: str
     image_path: str
 
@@ -48,19 +52,17 @@ def save_image(image: UploadFile) -> str:
 # -----------------------------
 # Endpoints
 # -----------------------------
-
-@app.get("/")
-def root():
-    return {"message": "FitCheck.AI backend is running!"}
-
 @app.post("/fit-check")
 async def fit_check(image: UploadFile = File(...), occasion: str = Form(...)):
     filepath = save_image(image)
 
     # --- TODO: Call Gemini Vision for analysis ---
     return FitCheckResponse(
-        score=8.3,
-        feedback="Love the layering! Try adding a bold accessory.",
+        fit_score=7.9,
+        color_theory_score=85.0,
+        occasion_score=90.0,
+        style_flow_score=78.5,
+        ai_feedback="Nice layering and color balance. Consider adding a statement accessory to elevate the fit.",
         edit_prompt=f"add a bold accessory for a {occasion}",
         image_path=filepath
     )
@@ -82,5 +84,25 @@ async def generate_voice(request: VoiceRequest):
         "audio_url": "https://example.com/voice-feedback.mp3"
     }
 
+@app.get("/")
+def root():
+    return {"message": "FitCheck.AI backend is running!"}
+
+# -----------------------------
+# Entry point for running directly
+# -----------------------------
 if __name__ == "__main__":
-    uvicorn.run("server:app", host="localhost", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+
+# -----------------------------
+# Requirements to Run This App
+# -----------------------------
+# - Python 3.8+
+# - FastAPI
+# - Uvicorn
+# - Pydantic
+# - Pillow (if image processing is added)
+# - httpx (if using async external API calls)
+# 
+# Recommended installation:
+# pip install fastapi uvicorn pydantic pillow httpx

@@ -11,7 +11,7 @@ import type { FitCheckResponse } from "@/lib/types"
 import { ANIMATION_DELAYS } from "@/lib/constants"
 
 interface ResultsDisplayProps {
-  originalImage: string
+  originalImage: File
   occasion: string
   analysisData: FitCheckResponse
   onReset: () => void
@@ -48,18 +48,25 @@ export default function ResultsDisplay({ originalImage, occasion, analysisData, 
       </div>
 
       {/* Fit Score */}
-      <FitScoreDisplay score={analysisData.score} isVisible={visibleSections.score} />
+      <FitScoreDisplay score={analysisData.fit_score} isVisible={visibleSections.score} />
 
       {/* Rating Breakdown */}
-      <RatingBreakdown breakdown={analysisData.breakdown} isVisible={visibleSections.breakdown} />
+      <RatingBreakdown
+        breakdown={{
+          color_theory_score: analysisData.color_theory_score,
+          occasion_score: analysisData.occasion_score,
+          style_flow_score: analysisData.style_flow_score,
+        }}
+        isVisible={visibleSections.breakdown}
+      />
 
       {/* AI Feedback */}
-      <AIFeedbackSection feedback={analysisData.feedback} isVisible={visibleSections.feedback} />
+      <AIFeedbackSection feedback={analysisData.ai_feedback} isVisible={visibleSections.feedback} />
 
       {/* Image Comparison */}
       <ImageComparison
         originalImage={originalImage}
-        imagePath={analysisData.image_path}
+        imagePath="user_uploaded_image" // Backend will handle this
         editPrompt={analysisData.edit_prompt}
         isVisible={visibleSections.images}
       />
