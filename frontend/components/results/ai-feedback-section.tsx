@@ -25,7 +25,10 @@ export default function AIFeedbackSection({ feedback, isVisible }: AIFeedbackSec
 
     setIsGeneratingVoice(true)
     try {
+      console.log("🔄 Generating voice feedback...")
+      console.log("Feedback to generate voice for:", feedback)
       const response = await generateVoice(feedback)
+      console.log("✅ Voice generation complete:", response)
       setAudioUrl(response.audio_url)
 
       // Create audio element

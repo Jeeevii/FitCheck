@@ -60,7 +60,7 @@ export async function generateEdit(imagePath: string, editPrompt: string): Promi
 export async function generateVoice(feedback: string): Promise<GenerateVoiceResponse> {
   console.log("🔄 API: Generating voice feedback...", { feedbackLength: feedback.length })
 
-  const response = await fetch(`${API_BASE_URL}/api/generate-voice`, {
+  const response = await fetch(`${API_BASE_URL}/generate-voice`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

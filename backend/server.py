@@ -101,6 +101,7 @@ async def generate_image(request: EditRequest):
     
 @app.post("/generate-voice")
 async def generate_voice(request: VoiceRequest):
+    print(f"Received voice request: {request.feedback}")
     # --- TODO: Call Resemble AI or another TTS service ---
     return {
         "audio_url": "https://example.com/voice-feedback.mp3"
