@@ -36,18 +36,3 @@ def analyze_outfit(image_bytes: bytes, occasion: str) -> tuple[str, float, str]:
     edit_prompt = parts[5].strip()
     
     return fit_score, color_theory_score, occasion_score, style_flow_score, ai_feedback, edit_prompt
-
-    # text = response.text or ""
-    # print("Gemini Response: " + text)
-    # # Score extraction
-    # score_match = re.search(r"(\d+(\.\d+)?)/?10", text)
-    # score = float(score_match.group(1)) if score_match else 7.5
-
-    # # Simple edit suggestion extraction
-    # edit_prompt = "Try adding a small accessory."
-    # if "edit" in text.lower():
-    #     edit_prompt = text.split("edit", 1)[-1].strip().strip(".")
-    # elif "try" in text.lower():
-    #     edit_prompt = text.split("try", 1)[-1].strip().strip(".")
-
-    # return text, score, edit_prompt
