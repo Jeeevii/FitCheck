@@ -3,7 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uuid
 import os
-import uvicorn
+from gemini.fitcheck import analyze_outfit
+
+UPLOAD_DIR = "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 app = FastAPI()
 
@@ -57,17 +60,21 @@ async def fit_check(image: UploadFile = File(...), occasion: str = Form(...)):
     print(f"Received image: {image.filename}, occasion: {occasion}")
     filepath = save_image(image)
 
-    # --- TODO: Call Gemini Vision for analysis ---
-    return FitCheckResponse(
-        fit_score=7.9,
-        color_theory_score=85.0,
-        occasion_score=90.0,
-        style_flow_score=78.5,
-        ai_feedback="Nice layering and color balance. Consider adding a statement accessory to elevate the fit.",
-        edit_prompt=f"add a bold accessory for a {occasion}",
-        image_path=filepath
-    )
+    try:
+        with open(filepath, "rb") as f:
+            image_bytes = f.read()
 
+        feedback, score, edit_prompt = analyze_outfit(image_bytes, occasion)
+
+        return FitCheckResponse(
+            score=score,
+            feedback=feedback,
+            edit_prompt=edit_prompt,
+            image_path=filepath
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Gemini Vision error: {e}")
+    
 @app.post("/generate-image")
 async def generate_image(request: EditRequest):
     if not os.path.exists(request.image_path):
