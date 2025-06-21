@@ -11,12 +11,12 @@ interface OccasionSelectorProps {
 }
 
 const occasions = [
-  { id: "date", label: "Date Night", icon: Heart, emoji: "💕" },
+  { id: "date night", label: "Date Night", icon: Heart, emoji: "💕" },
   { id: "work", label: "Work", icon: Briefcase, emoji: "💼" },
   { id: "casual", label: "Casual", icon: Coffee, emoji: "☕" },
   { id: "party", label: "Party", icon: PartyPopper, emoji: "🎉" },
-  { id: "gym", label: "Gym", icon: Dumbbell, emoji: "💪" },
-  { id: "special", label: "Special Event", icon: Sparkles, emoji: "✨" },
+  { id: "gym/workout", label: "Gym", icon: Dumbbell, emoji: "💪" },
+  { id: "special event", label: "Special Event", icon: Sparkles, emoji: "✨" },
 ]
 
 export default function OccasionSelector({ selectedOccasion, onOccasionSelect }: OccasionSelectorProps) {

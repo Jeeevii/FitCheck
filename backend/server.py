@@ -95,15 +95,3 @@ def root():
 if __name__ == "__main__":
     uvicorn.run("server:app", host="localhost", port=8000, reload=True)
 
-# -----------------------------
-# Requirements to Run This App
-# -----------------------------
-# - Python 3.8+
-# - FastAPI
-# - Uvicorn
-# - Pydantic
-# - Pillow (if image processing is added)
-# - httpx (if using async external API calls)
-# 
-# Recommended installation:
-# pip install fastapi uvicorn pydantic pillow httpx
