@@ -12,6 +12,8 @@ export interface FitCheckResponse {
   style_flow_score: number // Style flow score (0-100)
   ai_feedback: string // AI feedback and suggestions
   edit_prompt: string // Edit prompt for image enhancement
+  image_path: string
+
 }
 
 export interface GenerateEditRequest {
