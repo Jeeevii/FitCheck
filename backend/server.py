@@ -7,16 +7,16 @@ import uvicorn
 from fastapi.staticfiles import StaticFiles
 from gemini.fitcheck import analyze_outfit
 from kontext import edit_image_with_kontext
+from chatterbox import generate_chatterbox_voice
 
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 app = FastAPI()
 
-# Allow frontend to call backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["localhost", "http://localhost:3000"],
+    allow_origins=["http://localhost:3000"],  # Full valid URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -101,11 +101,19 @@ async def generate_image(request: EditRequest):
     
 @app.post("/generate-voice")
 async def generate_voice(request: VoiceRequest):
-    print(f"Received voice request: {request.feedback}")
-    # --- TODO: Call Resemble AI or another TTS service ---
-    return {
-        "audio_url": "https://example.com/voice-feedback.mp3"
-    }
+    try:
+        print(f"🎙️ Received voice request: {request.feedback}")
+        voice_url = generate_chatterbox_voice(request.feedback)
+
+        if not voice_url:
+            raise HTTPException(status_code=500, detail="Failed to generate audio.")
+        print(f"Raw output: {voice_url} ({type(voice_url)})")
+
+        return {"audio_url": voice_url}
+
+    except Exception as e:
+        print(f"❌ Error generating voice: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/")
 def root():

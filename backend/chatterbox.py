@@ -1,19 +1,26 @@
-import torchaudio as ta
-import torch
-from chatterbox.tts import ChatterboxTTS
+import replicate
 
-# Automatically detect the best available device
-if torch.cuda.is_available():
-    device = "cuda"
-elif torch.backends.mps.is_available():
-    device = "mps"
-else:
-    device = "cpu"
+def generate_chatterbox_voice(prompt: str) -> str | None:
+    try:
+        output = replicate.run(
+            "resemble-ai/chatterbox",
+            input={
+                "seed": 0,
+                "prompt": prompt,
+                "cfg_weight": 0.5,
+                "temperature": 0.85,
+                "exaggeration": 0.85
+            }
+        )
+        print(f"Raw output from replicate: {output} ({type(output)})")
 
-print(f"Using device: {device}")
+        if isinstance(output, list):
+            return output[0]  # usually the audio URL
+        elif isinstance(output, str):
+            return output
+        else:
+            return str(output)
 
-model = ChatterboxTTS.from_pretrained(device=device)
-
-text = "Ezreal and Jinx teamed up with Ahri, Yasuo, and Teemo to take down the enemy's Nexus in an epic late-game pentakill."
-wav = model.generate(text)
-ta.save("test-1.wav", wav, model.sr)
+    except Exception as e:
+        print(f"❌ Error generating voice: {e}")
+        return None
