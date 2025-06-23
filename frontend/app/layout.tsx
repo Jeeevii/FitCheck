@@ -2,9 +2,10 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.dev',
+  title: 'FitCheck.AI',
+  description: 'Rate your fit, get feedback, and see AI outfit edits.',
+  generator: 'Built with FastAPI + Next.js',
+  keywords: ['AI fashion', 'outfit rating', 'Kontext', 'Chatterbox', 'Gemini'],
 }
 
 export default function RootLayout({
