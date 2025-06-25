@@ -2,8 +2,9 @@
 
 **FitCheck.AI** is a fullstack AI-powered virtual stylist that helps users level up their outfits.  
 Upload a photo of your fit, enter the occasion, and get an AI-generated style rating, outfit suggestions, and a visual upgrade — plus voice feedback to hype (or roast) your look.
-
-> Built in under 5 hours at the **FLUX.1 Kontext AI Hackathon** hosted by Replicate and Black Forest Labs on 6/21/2025.
+ 
+[Watch Demo Here!](https://www.youtube.com/watch?v=Melo3dYctjM)
+> Built in under 6 hours at the **FLUX.1 Kontext AI Hackathon** hosted by Replicate and Black Forest Labs on 6/21/2025.
 
 ---
 
@@ -93,12 +94,4 @@ npm run dev
 
 Frontend runs on: `http://localhost:3000`
 
----
-
-## 🎥 Demo
-
-[Watch Demo Here!](https://www.youtube.com/watch?v=Melo3dYctjM)
-
----
-
-Let us know if you'd like to try it — we’ve got sponsor credits and can deploy a live version!
+Let us know if you'd like to try it - we’ve got sponsor credits and can deploy a live version!
