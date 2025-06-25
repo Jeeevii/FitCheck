@@ -6,20 +6,21 @@ Upload a photo of your fit, enter the occasion, and get an AI-generated style ra
 [Watch Demo Here!](https://www.youtube.com/watch?v=Melo3dYctjM)
 > Built in under 6 hours at the **FLUX.1 Kontext AI Hackathon** hosted by Replicate and Black Forest Labs on 6/21/2025.
 
----
-
 ## 👥 Team
 
 - **Jeevi**  
-  [LinkedIn](https://www.linkedin.com/in/jeevithan-mahenthran/) • [GitHub](https://github.com/Jeeevii)
+  [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jeevithan-mahenthran/)  
+  [![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=github&logoColor=white)](https://github.com/Jeeevii)
 
 - **Alexander Lee**  
-  [LinkedIn](https://www.linkedin.com/in/alex--lee1/) • [GitHub](https://github.com/alexlee39)
+  [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/alex--lee1/)  
+  [![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=github&logoColor=white)](https://github.com/alexlee39)
 
 - **Hanlin Huang**  
-  [LinkedIn](https://www.linkedin.com/in/hanlin-huang-6aa4131ba/) • [GitHub](https://github.com/iunsafa)
+  [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/hanlin-huang-6aa4131ba/)  
+  [![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=github&logoColor=white)](https://github.com/iunsafa)
 
----
+
 
 ## 🧠 What It Does
 - 📷 Upload an outfit image  
