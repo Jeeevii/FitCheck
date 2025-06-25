@@ -8,7 +8,7 @@ Upload a photo of your fit, enter the occasion, and get an AI-generated style ra
 
 ## 👥 Team
 
-- **Jeevi**  
+- **Jeevithan Mahenthran**  
   [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jeevithan-mahenthran/)  
   [![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=github&logoColor=white)](https://github.com/Jeeevii)
 
